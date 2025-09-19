@@ -34,11 +34,11 @@ resource "azurerm_network_interface" "nic" {
     name                          = "internal"
     subnet_id                     = azurerm_subnet.subnet.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.pip[count.index].id
+    public_ip_address_id          = azurerm_public_ip.pip.id
   }
 }
 
-resource "azurerm_linux_virtual_machine" "vm" {
+resource "azurerm_linux_virtual_machine" "azure_app_vm" {
   name                = "portainer"
   resource_group_name = var.resource_group_name
   location            = var.location
@@ -46,7 +46,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   admin_username      = "joey"
 
   network_interface_ids = [
-    azurerm_network_interface.nic[count.index].id,
+    azurerm_network_interface.nic.id,
   ]
 
   os_disk {

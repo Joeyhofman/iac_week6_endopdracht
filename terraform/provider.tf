@@ -5,13 +5,16 @@ terraform {
   }
 }
 
-provider "azurerm" {
-  features {}
+provider "esxi" {
+  esxi_hostname = "192.168.1.20"
+  esxi_hostport = 22
+  esxi_hostssl  = 443
+  esxi_username = "root"
+  esxi_password = "Infra123#"
 }
 
-provider "vsphere" {
-  user           = var.vsphere_user
-  password       = var.vsphere_password
-  vsphere_server = var.vsphere_server
-  allow_unverified_ssl = true
+provider "azurerm" {
+  features {}
+  resource_provider_registrations = "none"
+  subscription_id = "c064671c-8f74-4fec-b088-b53c568245eb"
 }
