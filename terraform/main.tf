@@ -1,7 +1,7 @@
 module "azure_app" {
-  source   = "./azure"
+  source = "./azure"
 }
 
 module "esxi_app" {
-  source   = "./esxi"
+  source = "./esxi"
 }

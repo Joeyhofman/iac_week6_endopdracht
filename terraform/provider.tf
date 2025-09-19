@@ -1,7 +1,7 @@
 terraform {
   required_providers {
-    azurerm = { source  = "hashicorp/azurerm", version = "=4.4.0"}
-    esxi = { source  = "josenk/esxi", version = "~> 1.6"}
+    azurerm = { source = "hashicorp/azurerm", version = "=4.4.0" }
+    esxi    = { source = "josenk/esxi", version = "~> 1.6" }
   }
 }
 
@@ -16,5 +16,5 @@ provider "esxi" {
 provider "azurerm" {
   features {}
   resource_provider_registrations = "none"
-  subscription_id = "c064671c-8f74-4fec-b088-b53c568245eb"
+  subscription_id                 = "c064671c-8f74-4fec-b088-b53c568245eb"
 }
