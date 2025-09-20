@@ -26,7 +26,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: terraform -chdir=terraform init
-      - run: terraform -chdir=terraform apply -auto-approve \
+      - run: |
+          cd terraform
+          terraform init
+          terraform apply -auto-approve \
             -var "esxi_app_user=${{ secrets.ESXI_APP_USER }}" \
             -var "esxi_app_password=${{ secrets.ESXI_APP_PASSWORD }}" \
             -var "azure_app_subscription_id=${{ secrets.AZURE_APP_SUBSCRIPTION_ID }}"
