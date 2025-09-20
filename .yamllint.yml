@@ -12,6 +12,5 @@ rules:
   document-start: disable
   comments-indentation: enable
   new-line-at-end-of-file: enable
-  brackets-spacing: enable
   truthy:
     allowed-values: ['true', 'false', 'yes', 'no', 'on', 'off']
