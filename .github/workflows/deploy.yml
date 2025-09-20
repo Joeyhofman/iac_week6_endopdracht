@@ -1,9 +1,9 @@
----
-name: Terraform
+name: CI/CD
 on:
   push:
     paths:
       - 'terraform/**'
+      - 'ansible/**'
   workflow_dispatch:
 
 jobs:
@@ -14,24 +14,25 @@ jobs:
       - run: terraform -chdir=terraform init
       - run: terraform -chdir=terraform fmt -check
       - run: terraform -chdir=terraform validate
-
-  terraform_apply:
-    needs: terraform_validate
+  ansible_lint:
     runs-on: self-hosted
+    needs: terraform_validate
+    steps:
+      - uses: actions/checkout@v3
+      - run: yamllint ansible/
+  terraform_apply:
+    runs-on: self-hosted
+    needs: [terraform_validate, ansible_lint]
     steps:
       - uses: actions/checkout@v3
       - run: terraform -chdir=terraform init
-      - run: terraform -chdir=terraform apply -auto-approve
-
-  yaml_lint:
+      - run: terraform -chdir=terraform apply -auto-approve \
+            -var "esxi_app_user=${{ secrets.ESXI_APP_USER }}" \
+            -var "esxi_app_password=${{ secrets.ESXI_APP_PASSWORD }}" \
+            -var "azure_app_subscription_id=${{ secrets.AZURE_APP_SUBSCRIPTION_ID }}"
+  ansible_deploy:
     runs-on: self-hosted
+    needs: terraform_apply
     steps:
       - uses: actions/checkout@v3
-      - run: yamllint .
-
-  deploy_app:
-    needs: yaml_lint
-    runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@v3
-      - run: ansible-playbook -i inventory.ini playbooks/deploy.yml
+      - run: ansible-playbook -i ansible/inventory.ini ansible/playbooks/deploy.yml
