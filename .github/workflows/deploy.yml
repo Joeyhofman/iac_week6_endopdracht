@@ -5,38 +5,33 @@ on:
     paths:
       - 'terraform/**'
   workflow_dispatch:
+
 jobs:
   terraform_validate:
     runs-on: self-hosted
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Terraform Init
-        run: terraform -chdir=terraform init
-      - name: Terraform Format Check
-        run: terraform -chdir=terraform fmt -check
-      - name: Terraform Validate
-        run: terraform -chdir=terraform validate
+      - uses: actions/checkout@v3
+      - run: terraform -chdir=terraform init
+      - run: terraform -chdir=terraform fmt -check
+      - run: terraform -chdir=terraform validate
+
   terraform_apply:
-    needs: validate
+    needs: terraform_validate
     runs-on: self-hosted
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Terraform Init
-        run: terraform -chdir=terraform init
-      - name: Terraform Apply
-        run: terraform -chdir=terraform apply -auto-approve
+      - uses: actions/checkout@v3
+      - run: terraform -chdir=terraform init
+      - run: terraform -chdir=terraform apply -auto-approve
+
   yaml_lint:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
-      - name: Lint YAML
-        run: yamllint .
+      - run: yamllint .
+
   deploy_app:
-    needs: lint
+    needs: yaml_lint
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
-      - name: Run Ansible Playbook
-        run: ansible-playbook -i inventory.ini playbooks/deploy.yml
+      - run: ansible-playbook -i inventory.ini playbooks/deploy.yml
