@@ -21,7 +21,7 @@ resource "azurerm_public_ip" "pip" {
   name                = "pip-ubuntu"
   location            = var.location
   resource_group_name = var.resource_group_name
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
   sku                 = "Basic"
 }
 
@@ -62,7 +62,7 @@ resource "azurerm_linux_virtual_machine" "azure_app_vm" {
   }
 
   admin_ssh_key {
-    username   = "joey-"
+    username   = "joey"
     public_key = data.azurerm_ssh_public_key.skylab.public_key
   }
   custom_data = base64encode(templatefile("${path.module}/userdata.yml", {
