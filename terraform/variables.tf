@@ -19,19 +19,16 @@ variable "esxi_app_https_port" {
 variable "esxi_app_user" {
   description = "The username the esxi_app module uses to connect to the esxi host."
   type        = string
-  default     = "root"
 }
 
 variable "esxi_app_password" {
   description = "The password for the user the esxi_app module uses to connect to the esxi host."
   type        = string
   sensitive   = true
-  default     = "Infra123#"
 }
 
 variable "azure_app_subscription_id" {
   description = "The subcription_id used for the azure provider."
   type        = string
   sensitive   = true
-  default     = "c064671c-8f74-4fec-b088-b53c568245eb"
 }
