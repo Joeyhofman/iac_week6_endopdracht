@@ -5,7 +5,6 @@ on:
       - 'terraform/**'
       - 'ansible/**'
   workflow_dispatch:
-
 jobs:
   terraform_validate:
     runs-on: self-hosted
@@ -33,9 +32,19 @@ jobs:
             -var "esxi_app_user=${{ secrets.ESXI_APP_USER }}" \
             -var "esxi_app_password=${{ secrets.ESXI_APP_PASSWORD }}" \
             -var "azure_app_subscription_id=${{ secrets.AZURE_APP_SUBSCRIPTION_ID }}"
+      - name: Upload inventory
+        uses: actions/upload-artifact@v3
+        with:
+          name: ansible-inventory
+          path: ansible/inventory.ini
   ansible_deploy:
     runs-on: self-hosted
     needs: terraform_apply
     steps:
       - uses: actions/checkout@v3
+      - name: Download inventory
+        uses: actions/download-artifact@v3
+        with:
+          name: ansible-inventory
+          path: ansible/
       - run: ansible-playbook -i ansible/inventory.ini ansible/playbooks/deploy.yml
