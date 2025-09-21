@@ -6,22 +6,17 @@ on:
       - 'ansible/**'
   workflow_dispatch:
 jobs:
-  terraform_validate:
+  validate_and_lint:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
       - run: terraform -chdir=terraform init
       - run: terraform -chdir=terraform fmt -check
       - run: terraform -chdir=terraform validate
-  ansible_lint:
-    runs-on: self-hosted
-    needs: terraform_validate
-    steps:
-      - uses: actions/checkout@v3
       - run: yamllint ansible/
-  terraform_apply:
+  deploy:
     runs-on: self-hosted
-    needs: [terraform_validate, ansible_lint]
+    needs: validate_and_lint
     steps:
       - uses: actions/checkout@v3
       - run: terraform -chdir=terraform init
@@ -29,22 +24,7 @@ jobs:
           cd terraform
           terraform init
           terraform apply -auto-approve \
-            -var "esxi_app_user=${{ secrets.ESXI_APP_USER }}" \
-            -var "esxi_app_password=${{ secrets.ESXI_APP_PASSWORD }}" \
-            -var "azure_app_subscription_id=${{ secrets.AZURE_APP_SUBSCRIPTION_ID }}"
-      - name: Upload inventory
-        uses: actions/upload-artifact@v3
-        with:
-          name: ansible-inventory
-          path: ansible/inventory.ini
-  ansible_deploy:
-    runs-on: self-hosted
-    needs: terraform_apply
-    steps:
-      - uses: actions/checkout@v3
-      - name: Download inventory
-        uses: actions/download-artifact@v3
-        with:
-          name: ansible-inventory
-          path: ansible/
+          -var "esxi_app_user=${{ secrets.ESXI_APP_USER }}" \
+          -var "esxi_app_password=${{ secrets.ESXI_APP_PASSWORD }}" \
+          -var "azure_app_subscription_id=${{ secrets.AZURE_APP_SUBSCRIPTION_ID }}"
       - run: ansible-playbook -i ansible/inventory.ini ansible/playbooks/deploy.yml
