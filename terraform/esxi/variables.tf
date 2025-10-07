@@ -31,6 +31,14 @@ variable "ubuntu_image_url" {
 }
 variable "ssh_public_key_path" {
     type = string
+    sensitive = true
     description = "The path to the public ssh key"
     default = "~/.ssh/terraform.pub"
+}
+
+variable "ssh_azure_private_key_path" {
+    type = string
+    sensitive = true
+    description = "The path to the private key for the azure vm."
+    default = "~/.ssh/skylab"
 }
