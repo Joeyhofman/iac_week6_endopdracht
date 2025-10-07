@@ -7,9 +7,6 @@ terraform {
   }
 }
 
-locals {
-  ssh_key = file(var.ssh_public_key_path)
-}
 
 locals {
   ssh_key                       = file(var.ssh_public_key_path)
