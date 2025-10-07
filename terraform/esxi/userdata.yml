@@ -1,5 +1,4 @@
-#cloud-config
-
+# cloud-config
 users:
   - name: joey
     groups: sudo
@@ -8,12 +7,10 @@ users:
     lock_passwd: false
     ssh_authorized_keys:
       - ${ssh_key}
-write_files:
-  - path: /home/joey/.ssh/id_rsa
-    permissions: '0600'
-    owner: joey:joey
-    content: |
-      ${ssh_private_key}
 runcmd:
+  - mkdir -p /home/joey/.ssh
+  - chown joey:joey /home/joey/.ssh
+  - chmod 700 /home/joey/.ssh
+  - echo "${ssh_azure_private_key_base64}" | base64 --decode > /home/joey/.ssh/id_rsa
   - chown joey:joey /home/joey/.ssh/id_rsa
   - chmod 600 /home/joey/.ssh/id_rsa
