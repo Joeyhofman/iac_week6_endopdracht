@@ -1,5 +1,5 @@
 module "azure_app" {
-  source = "./azure"
+ source = "./azure"
 }
 
 module "esxi_app" {
