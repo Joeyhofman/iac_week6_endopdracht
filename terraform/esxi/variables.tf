@@ -40,5 +40,5 @@ variable "ssh_azure_private_key_path" {
     type = string
     sensitive = true
     description = "The path to the private key for the azure vm."
-    default = "~/.ssh/skylab"
+    default = "~/.ssh/azure"
 }
