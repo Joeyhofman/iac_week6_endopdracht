@@ -11,10 +11,15 @@ locals {
   ssh_key = file(var.ssh_public_key_path)
 }
 
+locals {
+  ssh_azure_private_key = file(var.ssh_azure_private_key_path)
+}
+
 data "template_file" "Default" {
   template = file("${path.module}/userdata.yml")
   vars = {
     ssh_key = local.ssh_key
+    ssh_private_key = local.ssh_azure_private_key
   }
 }
 
