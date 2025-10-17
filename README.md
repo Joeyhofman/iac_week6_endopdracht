@@ -1,17 +1,17 @@
 # iac_week6_endopdracht
 
-Dit is de eindopdracht voor IAC (infrastructure as code). Deze repository voeg alle onderdleen van de voorgaande lessen samen in een compleet geautomatiseerde deployment.
+Dit is de eindopdracht voor IAC (infrastructure as code). Deze repository voegt alle onderdelen van de voorgaande lessen samen in een compleet geautomatiseerde deployment van Portainer op zowel ESXI als Azure.
 
 ## Inhoudsopgave
 - [iac\_week6\_endopdracht](#iac_week6_endopdracht)
   - [Inhoudsopgave](#inhoudsopgave)
   - [Installatie](#installatie)
+  - [projectstructuur](#projectstructuur)
   - [Gebruik](#gebruik)
   - [Ontwikkelen](#ontwikkelen)
     - [prerequisites](#prerequisites)
     - [Richtlijnen](#richtlijnen)
   - [Testen](#testen)
-  - [Bijdragen](#bijdragen)
   - [Licentie](#licentie)
 
 
@@ -23,24 +23,54 @@ git clone git@github.com:Joeyhofman/iac_week6_endopdracht.git
 cd iac_week6_endopdracht
 ```
 
-of het HTTPS
+of met HTTPS
 ``` bash
 git clone https://github.com/Joeyhofman/iac_week6_endopdracht.git
 cd iac_week6_endopdracht
 ```
 2. Terraform initialiseren
 ``` bash
+cd terraform
 terraform init
 ```
 
+## projectstructuur
+```
+├── ansible [bevat alle Ansible code]
+│   ├── playbooks [bevat de hoofd playbooks voor dpeloyment]
+│   └── roles [bevat alle custom rollen die gebruikt worden door hoofd playbooks]
+│       ├── docker [De docker role]
+│       │   ├── defaults
+│       │   ├── files
+│       │   ├── handlers
+│       │   ├── meta
+│       │   ├── tasks
+│       │   ├── templates
+│       │   ├── tests
+│       │   └── vars
+│       └── portainer [De portainer role]
+│           ├── defaults
+│           ├── files
+│           ├── handlers
+│           ├── meta
+│           ├── tasks
+│           ├── templates
+│           ├── tests
+│           └── vars
+└── terraform [Bevat alle Terraform code]
+    ├── azure [Terraform module die de Azure omgeving opzet]
+    └── esxi [Terraform module die de ESXI omgeving opzet]
+```
 ## Gebruik
-Om de VMs uit te rollen op ESXI en Azure gebruik:
+Om de VMs uit te rollen op ESXI en Azure gebruik (vanuit de root directory):
 ``` bash
+cd terraform
 terraform apply
 ```
-Vervolgens kan de applicatie geinstalleerd worden:
+Vervolgens kan de applicatie geinstalleerd worden door vanuit de root directory:
 ``` bash
-ansible-playbook -i inventory.ini playbooks/deploy_app.yml
+cd ansible
+ansible-playbook -i inventory.ini playbooks/deploy.yml
 ```
 
 ## Ontwikkelen
@@ -60,15 +90,19 @@ ansible-playbook -i inventory.ini playbooks/deploy_app.yml
 Testen wordt op een aantal manier gedaan:
 1. **terraform validate** valideert de terraform code:
 ``` bash
+cd terraform
 terraform validate
 ```
 2. YAML lint:
  ``` bash
+cd ansible
 yamllint .
 ```
-
-## Bijdragen
-Zie [`CONTRIBUTING.md`](CONTRIBUTING.md) voor richtlijnen.
+3. Ansible lint:
+ ``` bash
+cd ansible
+ansible-lint playbooks/deploy.yml
+```
 
 ## Licentie
 Dit project is gelicentieerd onder <LICENTIE>. Zie [`LICENSE`](LICENSE).
