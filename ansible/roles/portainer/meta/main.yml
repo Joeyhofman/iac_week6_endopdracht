@@ -2,9 +2,9 @@
 galaxy_info:
   author: Joey Hofman
   description: deploys Portainer
-  company: N/A
-  license: license (GPL-2.0-or-later, MIT, etc)
+  company: unknown
+  license: MIT
 
-  min_ansible_version: 2.1
+  min_ansible_version: "2.1"
   galaxy_tags: []
 dependencies: []

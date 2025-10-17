@@ -7,7 +7,7 @@
       - curl
       - software-properties-common
     state: present
-    update_cache: yes
+    update_cache: true
 
 - name: Add Docker GPG key
   ansible.builtin.apt_key:
@@ -27,16 +27,16 @@
       - containerd.io
       - docker-compose-plugin
     state: present
-    update_cache: yes
+    update_cache: true
 
 - name: Ensure Docker service is running
   ansible.builtin.service:
     name: docker
     state: started
-    enabled: yes
+    enabled: true
 - name: Add users to docker group
   ansible.builtin.user:
     name: "{{ item }}"
     groups: docker
-    append: yes
+    append: true
   loop: "{{ docker_users }}"

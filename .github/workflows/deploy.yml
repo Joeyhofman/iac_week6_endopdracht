@@ -16,6 +16,9 @@ jobs:
       - run: terraform -chdir=terraform fmt -check
       - run: terraform -chdir=terraform validate
       - run: yamllint ansible/
+      - run: |
+          cd ansible
+          ansible-lint playbooks/deploy.yml
   deploy:
     runs-on: self-hosted
     needs: validate_and_lint
