@@ -1,9 +1,9 @@
-# iac_week6_endopdracht
+# iac_week6_eindopdracht
 
 Dit is de eindopdracht voor IAC (infrastructure as code). Deze repository voegt alle onderdelen van de voorgaande lessen samen in een compleet geautomatiseerde deployment van Portainer op zowel ESXI als Azure.
 
 ## Inhoudsopgave
-- [iac\_week6\_endopdracht](#iac_week6_endopdracht)
+- [iac\_week6\_eindopdracht](#iac_week6_eindopdracht)
   - [Inhoudsopgave](#inhoudsopgave)
   - [Installatie](#installatie)
   - [projectstructuur](#projectstructuur)
